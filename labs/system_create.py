@@ -19,7 +19,7 @@ def create_input_system(n):
                     A[i, j] = value
                     break
                 except ValueError:
-                    print("Введите число")
+                    print("(!) Введите число")
         
         while True:
             try:
@@ -27,6 +27,6 @@ def create_input_system(n):
                 b[i] = value
                 break
             except ValueError:
-                print("Введите число")
+                print("(!) Введите число")
     
     return A, b

@@ -1,64 +1,122 @@
 from system_create import generate_random_system, create_input_system
+from gauss_method import gauss_method
+from utils import check_residual, check_singular, print_system
 
 def main_menu():
-    print("МЕНЮ")
-    print("="*35)
-    print("1. Создать систему")
-    print("2. Уйти")
-    print("="*35)
-    choice = input("\nВыбор: ")
+    while True:
+        print("\nМЕНЮ")
+        print("="*50)
+        print("1. Создать систему")
+        print("2. Уйти")
+        print("="*50)
 
-    if choice == "1":
-        create_system_menu()
-    elif choice == "2":
-        exit()
-    else:
-        print("Некорректный ввод\n")
+        choice = input("\nВыбор: ").strip()
+
+        if choice == "1":
+            create_system_menu()
+        elif choice == "2":
+            exit()
+        else:
+            print("\n(!) Некорректный ввод")
 
 def create_system_menu():
     while True:
+        print("\nСОЗДАНИЕ СИСТЕМЫ")
+        print("="*50)
+        print("1. Случайная генерация")
+        print("2. Ручной ввод")
+        print("3. Назад")
+        print("="*50)
+        
+        choice = input("\nВыбор: ").strip()
+        
+        if choice == "1":
+            random_system_flow()
+        elif choice == "2":
+            input_system_flow()
+        elif choice == "3":
+            return
+        else:
+            print("\n(!) Некорректный ввод")
+
+def random_system_flow():
+    print("\nСЛУЧАЙНАЯ ГЕНЕРАЦИЯ")
+    print("="*50)
+    
+    while True:
         try:
             n = int(input("Введите размерность системы (n): "))
+            if n <= 0:
+                print("(!) Размерность должна быть положительной")
+                continue
             break
         except ValueError:
-            print("Неккоректный ввод\n")
-
-    print("СОЗДАНИЕ СИСТЕМЫ")
-    print("="*35)
-    print("1. Случайная генерация")
-    print("2. Ручной ввод")
-    print("="*35)
-
-    A, b = None, None
-    while True:
-        choice = input("\nВыбор: ")
-
-        if choice == "1":
-            while True:
-                try:
-                    d = int(input("Введите разброс: "))
-                    break
-                except ValueError:
-                    print("Неккоректный ввод\n")
-
-            A, b = generate_random_system(n, d)
-            break
-        elif choice == "2":
-            A, b = create_input_system(n)
-            break
-        else:
-            print("Некорректный ввод\n")
+            print("(!) Введите целое положительное число")
     
-    select_method_menu(A, b)
-
-def select_method_menu(A, b):
-    if (A, b) == (None, None):
-        return
-
-def main():
-    print("===== Вычислительная математика =====\n")
     while True:
-        main_menu()
+        try:
+            d = int(input("Введите разброс (диапазон [-d, d]): "))
+            if d <= 0:
+                print("(!) Разброс должен быть положительным")
+                continue
+            break
+        except ValueError:
+            print("(!) Введите целое положительное число")
+    
+    A, b = generate_random_system(n, d)
+    print_system(A, b)
+    
+    choose_method_menu(A, b)
+
+def input_system_flow():
+    print("\nРУЧНОЙ ВВОД")
+    print("="*50)
+    
+    while True:
+        try:
+            n = int(input("Введите размерность системы (n): "))
+            if n <= 0:
+                print("(!) Размерность должна быть положительной")
+                continue
+            break
+        except ValueError:
+            print("(!) Введите целое положительное число")
+    
+    A, b = create_input_system(n)
+    print_system(A, b)
+    
+    choose_method_menu(A, b)
+
+def execute_method(A, b, method):
+    x = method(A, b)
+    r = check_residual(A, b, x)
+
+    print("\nРешение:")
+    print(x)
+    print("\nНевязка:")
+    print(r)
+
+    input("\nПродолжить...")
+
+def choose_method_menu(A, b):
+    while True:
+        print("\nВЫБОР МЕТОДА")
+        print("="*50)
+        print("1. Метод Гаусса с поиском максимального по матрице")
+        print("2. Назад")
+        print("="*50)
+        
+        choice = input("\nВыбор: ").strip()
+        
+        if choice == "1":
+            if check_singular(A):
+                print("\n(!) Матрица вырождена")
+                continue
+            execute_method(A, b, gauss_method)            
+        elif choice == "2":
+            return
+        else:
+            print("\n(!) Некорректный ввод")
 
 if __name__ == "__main__":
-    main()
+    main_menu()
