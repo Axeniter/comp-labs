@@ -6,6 +6,12 @@ def generate_random_system(n, d):
     
     return A, b
 
+def generate_symmetrical_system(n, d):
+    A, b = generate_random_system(n, d)
+    A = np.triu(A) + np.triu(A, 1).T
+
+    return A, b
+
 def create_input_system(n):
     A = np.zeros((n,n))
     b = np.zeros(n)

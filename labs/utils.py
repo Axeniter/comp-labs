@@ -1,19 +1,22 @@
 import numpy as np
 
-def check_singular(A, tol=1e-10):
+def is_singular(A, tol=1e-10):
     """Проверка вырожденности матрицы с помощью числа обусловленности"""
     try:
         cond_number = np.linalg.cond(A)
         
         if np.isinf(cond_number) or cond_number > 1/tol:
-            print(f"(!) Матрица вырождена")
             return True
             
         return False
         
     except Exception as e:
-        print(f"(!) Ошибка при проверке матрицы: {e}")
         return True
+    
+def is_symmetrical(A, tol=1e-10):
+    """Проверка симметричности матрицы"""
+    return np.allclose(A, A.T, rtol=tol, atol=tol)
+
 
 def check_residual(A, b, x):
     """Проверка невязки решения"""

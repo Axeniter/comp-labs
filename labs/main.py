@@ -1,7 +1,8 @@
-from system_create import generate_random_system, create_input_system
+from system_create import generate_random_system, create_input_system, generate_symmetrical_system
 from gauss_method import gauss_method
 from optimal_exclusion import optimal_exclusion
-from utils import check_singular, print_system, execute_method
+from cholesky_method import cholesky_method
+from utils import is_singular, print_system, execute_method, is_symmetrical
 
 def main_menu():
     while True:
@@ -25,8 +26,9 @@ def create_system_menu():
         print("\nСОЗДАНИЕ СИСТЕМЫ")
         print("="*50)
         print("1. Случайная генерация")
-        print("2. Ручной ввод")
-        print("3. Назад")
+        print("2. Случайная генерация (симметричная матрица)")
+        print("3. Ручной ввод")
+        print("4. Назад")
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
@@ -34,13 +36,15 @@ def create_system_menu():
         if choice == "1":
             random_system_flow()
         elif choice == "2":
-            input_system_flow()
+            random_system_flow(symmetrical=True)
         elif choice == "3":
+            input_system_flow()
+        elif choice == "4":
             return
         else:
             print("\n(!) Некорректный ввод")
 
-def random_system_flow():
+def random_system_flow(symmetrical=False):
     print("\nСЛУЧАЙНАЯ ГЕНЕРАЦИЯ")
     print("="*50)
     
@@ -56,7 +60,7 @@ def random_system_flow():
     
     while True:
         try:
-            d = int(input("Введите разброс (диапазон [-d, d]): "))
+            d = int(input("Введите разброс значений d (диапазон [-d, d]): "))
             if d <= 0:
                 print("(!) Разброс должен быть положительным")
                 continue
@@ -64,7 +68,10 @@ def random_system_flow():
         except ValueError:
             print("(!) Введите целое положительное число")
     
-    A, b = generate_random_system(n, d)
+    if not symmetrical:
+        A, b = generate_random_system(n, d)
+    else:
+        A, b = generate_symmetrical_system(n, d)
     print_system(A, b)
     
     choose_method_menu(A, b)
@@ -94,20 +101,31 @@ def choose_method_menu(A, b):
         print("="*50)
         print("1. Метод Гаусса с поиском максимального по матрице")
         print("2. Метод оптимального исключения")
-        print("3. Назад")
+        print("3. Метод квадратного корня (метод Холецкого)")
+        print("4. Назад")
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
         
         if choice == "1":
-            if check_singular(A):
+            if is_singular(A):
+                print("(!) Матрица вырождена")
                 continue
             execute_method(A, b, gauss_method)    
         elif choice == "2":
-            if check_singular(A):
+            if is_singular(A):
+                print("(!) Матрица вырождена")
                 continue
             execute_method(A, b, optimal_exclusion)
         elif choice == "3":
+            if is_singular(A):
+                print("(!) Матрица вырождена")
+                continue
+            if not is_symmetrical(A):
+                print("(!) Матрица несимметрична")
+                continue
+            execute_method(A, b, cholesky_method) 
+        elif choice == "4":
             return
         else:
             print("\n(!) Некорректный ввод")
