@@ -76,6 +76,7 @@ def random_system_flow(symmetrical=False):
         A, b = generate_random_system(n, d)
     else:
         A, b = generate_symmetrical_system(n, d)
+    print()
     print_system(A, b)
     
     choose_method_menu(A, b)

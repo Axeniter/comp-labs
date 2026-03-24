@@ -2,10 +2,13 @@ import numpy as np
 from utils import print_system
 
 
-def optimal_exclusion(A, b):
+def optimal_exclusion(A: np.ndarray, b: np.ndarray, log=True) -> np.ndarray:
     """Метод оптимального исключения"""
     n = len(b)
     
+    print("\nМетод оптимального исключения")
+    print("="*50)
+
     for k in range(n):
         max_row = k + np.argmax(np.abs(A[k:, k]))
         if max_row != k:
@@ -29,6 +32,10 @@ def optimal_exclusion(A, b):
                 A[i, :] -= d * A[k, :]
                 b[i] -= d * b[k]
         
-        print_system(A, b)
+        if log:
+            print(f"Шаг {k}")
+            print("-"*50)
+            print_system(A, b)
+            print("-"*50)
     
     return b

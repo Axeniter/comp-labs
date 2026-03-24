@@ -7,6 +7,9 @@ def gauss_method(A: np.ndarray , b: np.ndarray) -> np.ndarray:
     row_order = np.arange(n)
     col_order = np.arange(n)
 
+    print("\nМетод Гаусса")
+    print("="*50)
+
     for k in range(n):
         max_index = np.argmax(np.abs(A[row_order[k:], :][:, col_order[k:]]))
         max_row, max_col = divmod(max_index, n - k)

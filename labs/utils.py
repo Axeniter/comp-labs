@@ -27,7 +27,7 @@ def check_residual(A, b, x):
 
 
 def print_system(A, b):
-    print("\nСистема:")
+    print("Система:")
     print(A)
     print("\nВектор b:")
     print(b)

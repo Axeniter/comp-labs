@@ -1,11 +1,14 @@
 import numpy as np
 
 
-def lu_decomposition(A: np.ndarray, b: np.ndarray):
+def lu_decomposition(A: np.ndarray, b: np.ndarray, log=True) -> np.ndarray:
     """LU-разложение"""
     n = len(b)
     L = np.zeros((n,n))
     U = np.zeros((n,n))
+
+    print("\nРешение LU-разложением")
+    print("="*50)
 
     for i in range(n):
         for j in range(i, n):
@@ -15,6 +18,15 @@ def lu_decomposition(A: np.ndarray, b: np.ndarray):
         for j in range(i, n):
             k_sum = sum(L[j,k] * U[k,i] for k in range(i))
             L[j,i] = (A[j,i] - k_sum) / U[i,i]
+
+        if log:
+            print(f"Шаг {i}")
+            print("-"*50)
+            print("Матрица L:")
+            print(L)
+            print("\nМатрица U:")
+            print(U)
+            print("-"*50)
 
     y = np.zeros(n)
     for i in range(n):

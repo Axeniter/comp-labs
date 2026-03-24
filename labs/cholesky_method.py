@@ -1,11 +1,14 @@
 import numpy as np
 
 
-def cholesky_method(A: np.ndarray, b: np.ndarray):
+def cholesky_method(A: np.ndarray, b: np.ndarray, log=True) -> np.ndarray:
     """Метод квадратного корня (метод Холецкого)"""
     n = len(b)
     A = A.astype(complex)
     S = np.zeros((n,n), dtype=complex)
+
+    print("\nМетод квадратного корня")
+    print("="*50)
 
     for i in range(n):
         for j in range(i, n):
@@ -15,6 +18,13 @@ def cholesky_method(A: np.ndarray, b: np.ndarray):
                 S[i, i] = np.sqrt(A[i,i] - k_sum)
             else:
                 S[i, j] = (A[i,j] - k_sum) / S[i, i]
+                
+        if log:
+            print(f"Шаг {i}")
+            print("-"*50)
+            print("Матрица S:")
+            print(S)
+            print("-"*50)
 
     y = np.zeros(n, dtype=complex)
     for i in range(n):
