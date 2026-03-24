@@ -12,10 +12,10 @@ def optimal_exclusion(A, b):
             b[[k, max_row]] = b[[max_row, k]]
         
         if k > 0:
-            coeffs = A[k, :k].copy()
             for i in range(k):
-                A[k, :] -= coeffs[i] * A[i, :]
-                b[k] -= coeffs[i] * b[i]
+                d = A[k, i]
+                A[k, :] -= d * A[i, :]
+                b[k] -= d * b[i]
         
         pivot = A[k, k]
         A[k, :] /= pivot
