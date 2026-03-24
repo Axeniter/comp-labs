@@ -25,3 +25,16 @@ def print_system(A, b):
     print(A)
     print("\nВектор b:")
     print(b)
+
+def execute_method(A, b, method):
+    A_copy = A.copy()
+    b_copy = b.copy()
+    x = method(A_copy, b_copy)
+    r = check_residual(A, b, x)
+
+    print("\nРешение:")
+    print(x)
+    print("\nНевязка:")
+    print(r)
+
+    input("\nПродолжить...")

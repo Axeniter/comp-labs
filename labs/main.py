@@ -1,6 +1,7 @@
 from system_create import generate_random_system, create_input_system
 from gauss_method import gauss_method
-from utils import check_residual, check_singular, print_system
+from optimal_exclusion import optimal_exclusion
+from utils import check_singular, print_system, execute_method
 
 def main_menu():
     while True:
@@ -87,33 +88,26 @@ def input_system_flow():
     
     choose_method_menu(A, b)
 
-def execute_method(A, b, method):
-    x = method(A, b)
-    r = check_residual(A, b, x)
-
-    print("\nРешение:")
-    print(x)
-    print("\nНевязка:")
-    print(r)
-
-    input("\nПродолжить...")
-
 def choose_method_menu(A, b):
     while True:
         print("\nВЫБОР МЕТОДА")
         print("="*50)
         print("1. Метод Гаусса с поиском максимального по матрице")
-        print("2. Назад")
+        print("2. Метод оптимального исключения")
+        print("3. Назад")
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
         
         if choice == "1":
             if check_singular(A):
-                print("\n(!) Матрица вырождена")
                 continue
-            execute_method(A, b, gauss_method)            
+            execute_method(A, b, gauss_method)    
         elif choice == "2":
+            if check_singular(A):
+                continue
+            execute_method(A, b, optimal_exclusion)
+        elif choice == "3":
             return
         else:
             print("\n(!) Некорректный ввод")
