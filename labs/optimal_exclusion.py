@@ -15,8 +15,9 @@ def optimal_exclusion(A, b):
         if k > 0:
             for i in range(k):
                 d = A[k, i]
-                A[k, :] -= d * A[i, :]
-                b[k] -= d * b[i]
+                if d != 0:
+                    A[k, :] -= d * A[i, :]
+                    b[k] -= d * b[i]
         
         pivot = A[k, k]
         A[k, :] /= pivot
