@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def cholesky_method(A: np.ndarray, b: np.ndarray):
     """Метод квадратного корня (метод Холецкого)"""
     n = len(b)

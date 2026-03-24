@@ -4,6 +4,7 @@ from optimal_exclusion import optimal_exclusion
 from cholesky_method import cholesky_method
 from utils import is_singular, print_system, execute_method, is_symmetrical
 
+
 def main_menu():
     while True:
         print("\nМЕНЮ")
@@ -20,6 +21,7 @@ def main_menu():
             exit()
         else:
             print("\n(!) Некорректный ввод")
+
 
 def create_system_menu():
     while True:
@@ -43,6 +45,7 @@ def create_system_menu():
             return
         else:
             print("\n(!) Некорректный ввод")
+
 
 def random_system_flow(symmetrical=False):
     print("\nСЛУЧАЙНАЯ ГЕНЕРАЦИЯ")
@@ -76,6 +79,7 @@ def random_system_flow(symmetrical=False):
     
     choose_method_menu(A, b)
 
+
 def input_system_flow():
     print("\nРУЧНОЙ ВВОД")
     print("="*50)
@@ -94,6 +98,7 @@ def input_system_flow():
     print_system(A, b)
     
     choose_method_menu(A, b)
+
 
 def choose_method_menu(A, b):
     while True:
@@ -129,6 +134,7 @@ def choose_method_menu(A, b):
             return
         else:
             print("\n(!) Некорректный ввод")
+
 
 if __name__ == "__main__":
     main_menu()

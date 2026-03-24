@@ -1,6 +1,7 @@
 import numpy as np
 from utils import print_system
 
+
 def optimal_exclusion(A, b):
     """Метод оптимального исключения"""
     n = len(b)

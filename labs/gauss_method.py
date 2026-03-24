@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def gauss_method(A: np.ndarray , b: np.ndarray) -> np.ndarray:
     """Модификация метода Гаусса с поиском максимального элемента по всей матрице"""
     n = len(b)

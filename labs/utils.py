@@ -1,5 +1,6 @@
 import numpy as np
 
+
 def is_singular(A, tol=1e-10):
     """Проверка вырожденности матрицы с помощью числа обусловленности"""
     try:
@@ -13,6 +14,7 @@ def is_singular(A, tol=1e-10):
     except Exception as e:
         return True
     
+
 def is_symmetrical(A, tol=1e-10):
     """Проверка симметричности матрицы"""
     return np.allclose(A, A.T, rtol=tol, atol=tol)
@@ -23,11 +25,13 @@ def check_residual(A, b, x):
     r = A @ x - b
     return np.linalg.norm(r)
 
+
 def print_system(A, b):
     print("\nСистема:")
     print(A)
     print("\nВектор b:")
     print(b)
+
 
 def execute_method(A, b, method):
     A_copy = A.copy()
