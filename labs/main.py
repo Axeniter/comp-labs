@@ -106,26 +106,28 @@ def choose_method_menu(A, b):
     while True:
         print("\nВЫБОР МЕТОДА")
         print("="*50)
-        print("1. Метод Гаусса с поиском максимального по матрице")
-        print("2. Метод оптимального исключения")
-        print("3. Метод квадратного корня (метод Холецкого)")
-        print("4. Метод LU-разложения")
-        print("5. Назад")
+        print("1. Назад")
+        print("2. Метод Гаусса с поиском максимального по матрице")
+        print("3. Метод оптимального исключения")
+        print("4. Метод квадратного корня (метод Холецкого)")
+        print("5. Метод LU-разложения")
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
         
         if choice == "1":
-            if is_singular(A):
-                print("(!) Матрица вырождена")
-                continue
-            execute_method(A, b, gauss_method)    
+            return
         elif choice == "2":
             if is_singular(A):
                 print("(!) Матрица вырождена")
                 continue
-            execute_method(A, b, optimal_exclusion)
+            execute_method(A, b, gauss_method)    
         elif choice == "3":
+            if is_singular(A):
+                print("(!) Матрица вырождена")
+                continue
+            execute_method(A, b, optimal_exclusion)
+        elif choice == "4":
             if is_singular(A):
                 print("(!) Матрица вырождена")
                 continue
@@ -133,13 +135,11 @@ def choose_method_menu(A, b):
                 print("(!) Матрица несимметрична")
                 continue
             execute_method(A, b, cholesky_method) 
-        elif choice == "4":
+        elif choice == "5":
             if is_singular(A):
                 print("(!) Матрица вырождена")
                 continue
             execute_method(A, b, lu_decomposition)
-        elif choice == "5":
-            return
         else:
             print("\n(!) Некорректный ввод")
 

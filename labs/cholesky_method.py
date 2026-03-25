@@ -11,13 +11,11 @@ def cholesky_method(A: np.ndarray, b: np.ndarray, log=True) -> np.ndarray:
     print("="*50)
 
     for i in range(n):
-        for j in range(i, n):
-            k_sum = sum(S[k, i] * S[k, j] for k in range(i))
-
-            if i == j:
-                S[i, i] = np.sqrt(A[i,i] - k_sum)
-            else:
-                S[i, j] = (A[i,j] - k_sum) / S[i, i]
+        k_sum_diag = np.dot(S[:i, i], S[:i, i])
+        S[i, i] = np.sqrt(A[i, i] - k_sum_diag)
+        
+        k_sum_off = np.dot(S[:i, i], S[:i, i+1:])
+        S[i, i+1:] = (A[i, i+1:] - k_sum_off) / S[i, i]
                 
         if log:
             print(f"Шаг {i}")
@@ -28,12 +26,12 @@ def cholesky_method(A: np.ndarray, b: np.ndarray, log=True) -> np.ndarray:
 
     y = np.zeros(n, dtype=complex)
     for i in range(n):
-        k_sum = sum((S[k,i] * y[k] for k in range(i)))
-        y[i] = (b[i] - k_sum) / S[i,i]
+        k_sum = np.dot(S[:i, i], y[:i])
+        y[i] = (b[i] - k_sum) / S[i, i]
     
     x = np.zeros(n, dtype=complex)
     for i in range(n-1, -1, -1):
-        k_sum = sum((S[i,k] * x[k] for k in range(i+1, n)))
-        x[i] = (y[i] - k_sum) / S[i,i]
+        k_sum = np.dot(S[i, i+1:], x[i+1:])
+        x[i] = (y[i] - k_sum) / S[i, i]
 
     return x

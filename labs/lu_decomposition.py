@@ -11,13 +11,8 @@ def lu_decomposition(A: np.ndarray, b: np.ndarray, log=True) -> np.ndarray:
     print("="*50)
 
     for i in range(n):
-        for j in range(i, n):
-            k_sum = sum(L[i,k] * U[k,j] for k in range(i))
-            U[i, j] = A[i,j] - k_sum
-
-        for j in range(i, n):
-            k_sum = sum(L[j,k] * U[k,i] for k in range(i))
-            L[j,i] = (A[j,i] - k_sum) / U[i,i]
+        U[i, i:] = A[i, i:] - np.dot(L[i, :i], U[:i, i:])
+        L[i:, i] = (A[i:, i] - np.dot(L[i:, :i], U[:i, i])) / U[i, i]
 
         if log:
             print(f"Шаг {i}")
@@ -30,12 +25,12 @@ def lu_decomposition(A: np.ndarray, b: np.ndarray, log=True) -> np.ndarray:
 
     y = np.zeros(n)
     for i in range(n):
-        k_sum = sum((L[i,k] * y[k] for k in range(i)))
+        k_sum = np.dot(L[i, :i], y[:i])
         y[i] = b[i] - k_sum
 
     x = np.zeros(n)
     for i in range(n-1, -1, -1):
-        k_sum = sum((U[i,k] * x[k] for k in range(i+1, n)))
-        x[i] = (y[i] - k_sum) / U[i,i]
-
+        k_sum = np.dot(U[i, i+1:], x[i+1:])
+        x[i] = (y[i] - k_sum) / U[i, i]
+    
     return x
