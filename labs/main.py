@@ -3,6 +3,7 @@ from gauss_method import gauss_method
 from optimal_exclusion import optimal_exclusion
 from cholesky_method import cholesky_method
 from lu_decomposition import lu_decomposition
+from bordering_method import bordering_method
 from utils import is_singular, print_system, execute_method, is_symmetrical
 
 
@@ -111,6 +112,7 @@ def choose_method_menu(A, b):
         print("3. Метод оптимального исключения")
         print("4. Метод квадратного корня (метод Холецкого)")
         print("5. Метод LU-разложения")
+        print("6. Метод окаймления")
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
@@ -140,6 +142,11 @@ def choose_method_menu(A, b):
                 print("(!) Матрица вырождена")
                 continue
             execute_method(A, b, lu_decomposition)
+        elif choice == "6":
+            if is_singular(A):
+                print("(!) Матрица вырождена")
+                continue
+            execute_method(A, b, bordering_method)
         else:
             print("\n(!) Некорректный ввод")
 
