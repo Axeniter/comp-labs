@@ -4,6 +4,7 @@ from optimal_exclusion import optimal_exclusion
 from cholesky_method import cholesky_method
 from lu_decomposition import lu_decomposition
 from bordering_method import bordering_method
+from qr_decomposition import qr_decomposition
 from utils import is_singular, print_system, execute_method, is_symmetrical
 
 
@@ -113,6 +114,7 @@ def choose_method_menu(A, b):
         print("4. Метод квадратного корня (метод Холецкого)")
         print("5. Метод LU-разложения")
         print("6. Метод окаймления")
+        print("7. Метод отражений (QR-разложение)")
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
@@ -134,7 +136,7 @@ def choose_method_menu(A, b):
                 print("(!) Матрица вырождена")
                 continue
             if not is_symmetrical(A):
-                print("(!) Матрица несимметрична")
+                print("(!) Матрица не симметрична")
                 continue
             execute_method(A, b, cholesky_method) 
         elif choice == "5":
@@ -147,6 +149,8 @@ def choose_method_menu(A, b):
                 print("(!) Матрица вырождена")
                 continue
             execute_method(A, b, bordering_method)
+        elif choice == "7":
+            execute_method(A, b, qr_decomposition)
         else:
             print("\n(!) Некорректный ввод")
 
