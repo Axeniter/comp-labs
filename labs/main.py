@@ -1,10 +1,11 @@
-from system_create import generate_random_system, create_input_system, generate_symmetrical_system
+from system_create import generate_random_system, create_input_system
 from gauss_method import gauss_method
 from optimal_exclusion import optimal_exclusion
 from cholesky_method import cholesky_method
 from lu_decomposition import lu_decomposition
 from bordering_method import bordering_method
 from qr_decomposition import qr_decomposition
+from jacobi_method import jacobi_method, check_jacobi_convergence
 from utils import is_singular, print_system, execute_method, is_symmetrical
 
 
@@ -32,8 +33,10 @@ def create_system_menu():
         print("="*50)
         print("1. Случайная генерация")
         print("2. Случайная генерация (симметричная матрица)")
-        print("3. Ручной ввод")
-        print("4. Назад")
+        print("3. Случайная генерация (симметричная, положительно определённая матрица)")
+        print("4. Случайная генерация (матрица со строгим диагональным преобладанием)")
+        print("5. Ручной ввод")
+        print("6. Назад")
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
@@ -43,14 +46,18 @@ def create_system_menu():
         elif choice == "2":
             random_system_flow(symmetrical=True)
         elif choice == "3":
-            input_system_flow()
+            random_system_flow(symmetrical=True, positive_definite=True)
         elif choice == "4":
+            random_system_flow(diagonally_dominant=True)
+        elif choice == "5":
+            input_system_flow()
+        elif choice == "6":
             return
         else:
             print("\n(!) Некорректный ввод")
 
 
-def random_system_flow(symmetrical=False):
+def random_system_flow(symmetrical=False, positive_definite=False, diagonally_dominant=False):
     print("\nСЛУЧАЙНАЯ ГЕНЕРАЦИЯ")
     print("="*50)
     
@@ -74,10 +81,10 @@ def random_system_flow(symmetrical=False):
         except ValueError:
             print("(!) Введите целое положительное число")
     
-    if not symmetrical:
-        A, b = generate_random_system(n, d)
-    else:
-        A, b = generate_symmetrical_system(n, d)
+    A, b = generate_random_system(n, d,
+                                  symmetrical=symmetrical,
+                                  positive_definite=positive_definite,
+                                  diagonally_dominant=diagonally_dominant)
     print()
     print_system(A, b)
     
@@ -115,6 +122,9 @@ def choose_method_menu(A, b):
         print("5. Метод LU-разложения")
         print("6. Метод окаймления")
         print("7. Метод отражений (QR-разложение)")
+        print("8. Метод Якоби")
+        print("9. Метод Релаксации")
+        print("10. Метод сопряженных градиентов")
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
@@ -151,6 +161,15 @@ def choose_method_menu(A, b):
             execute_method(A, b, bordering_method)
         elif choice == "7":
             execute_method(A, b, qr_decomposition)
+        elif choice == "8":
+            if not check_jacobi_convergence(A):
+                print("Метод Якоби не сходится по критерию сходимости")
+                continue
+            execute_method(A, b, jacobi_method)
+        elif choice == "9":
+            continue
+        elif choice == "10":
+            continue
         else:
             print("\n(!) Некорректный ввод")
 
