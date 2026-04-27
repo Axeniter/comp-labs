@@ -1,4 +1,5 @@
-from system_create import generate_random_system, create_input_system
+from system_create import (create_input_system, generate_random_matrix, generate_diagonally_dominant_matrix,
+                           generate_random_vector, generate_spd_matrix, generate_symmetric_matrix)
 from gauss_method import gauss_method
 from optimal_exclusion import optimal_exclusion
 from cholesky_method import cholesky_method
@@ -6,6 +7,8 @@ from lu_decomposition import lu_decomposition
 from bordering_method import bordering_method
 from qr_decomposition import qr_decomposition
 from jacobi_method import jacobi_method, check_jacobi_convergence
+from gradient_method import gradient_descent, check_gradient_descent_convergence
+from sor_method import sor_method, check_sor_convergence
 from utils import is_singular, print_system, execute_method, is_symmetrical
 
 
@@ -33,7 +36,7 @@ def create_system_menu():
         print("="*50)
         print("1. Случайная генерация")
         print("2. Случайная генерация (симметричная матрица)")
-        print("3. Случайная генерация (симметричная, положительно определённая матрица)")
+        print("3. Случайная генерация (симметричная положительно определённая матрица)")
         print("4. Случайная генерация (матрица со строгим диагональным преобладанием)")
         print("5. Ручной ввод")
         print("6. Назад")
@@ -46,7 +49,7 @@ def create_system_menu():
         elif choice == "2":
             random_system_flow(symmetrical=True)
         elif choice == "3":
-            random_system_flow(symmetrical=True, positive_definite=True)
+            random_system_flow(spd=True)
         elif choice == "4":
             random_system_flow(diagonally_dominant=True)
         elif choice == "5":
@@ -57,7 +60,7 @@ def create_system_menu():
             print("\n(!) Некорректный ввод")
 
 
-def random_system_flow(symmetrical=False, positive_definite=False, diagonally_dominant=False):
+def random_system_flow(symmetrical=False, spd=False, diagonally_dominant=False):
     print("\nСЛУЧАЙНАЯ ГЕНЕРАЦИЯ")
     print("="*50)
     
@@ -81,10 +84,16 @@ def random_system_flow(symmetrical=False, positive_definite=False, diagonally_do
         except ValueError:
             print("(!) Введите целое положительное число")
     
-    A, b = generate_random_system(n, d,
-                                  symmetrical=symmetrical,
-                                  positive_definite=positive_definite,
-                                  diagonally_dominant=diagonally_dominant)
+    b = generate_random_vector(n, d)
+    if symmetrical:
+        A = generate_symmetric_matrix(n, d)
+    elif spd:
+        A = generate_spd_matrix(n, d)
+    elif diagonally_dominant:
+        A = generate_diagonally_dominant_matrix(n, d)
+    else:
+        A = generate_random_matrix(n, d)
+
     print()
     print_system(A, b)
     
@@ -123,8 +132,8 @@ def choose_method_menu(A, b):
         print("6. Метод окаймления")
         print("7. Метод отражений (QR-разложение)")
         print("8. Метод Якоби")
-        print("9. Метод Релаксации")
-        print("10. Метод сопряженных градиентов")
+        print("9. Метод последовательной релаксации")
+        print("10. Метод наискорейшего градиентного спуска")
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
@@ -163,13 +172,20 @@ def choose_method_menu(A, b):
             execute_method(A, b, qr_decomposition)
         elif choice == "8":
             if not check_jacobi_convergence(A):
-                print("Метод Якоби не сходится по критерию сходимости")
+                print("(!) Метод Якоби не сходится по критерию сходимости")
                 continue
             execute_method(A, b, jacobi_method)
         elif choice == "9":
-            continue
+            omega = float(input("Введите параметр омега: "))
+            if not check_sor_convergence(A, omega):
+                print("(!) Метод последовательной релаксации не сходится по критерию сходимости")
+                continue
+            execute_method(A, b, sor_method, omega=omega)
         elif choice == "10":
-            continue
+            if not check_gradient_descent_convergence(A):
+                print("(!) Метод градиентного спуска не сходится по критерию сходимости")
+                continue
+            execute_method(A, b, gradient_descent)
         else:
             print("\n(!) Некорректный ввод")
 

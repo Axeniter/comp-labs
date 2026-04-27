@@ -2,7 +2,7 @@ import numpy as np
 from utils import check_residual
 
 
-def sor_method(A: np.ndarray, b: np.ndarray, omega=1.0, x0=None, tol=1e-10, log=True):
+def sor_method(A: np.ndarray, b: np.ndarray, omega=1.0, x0=None, tol=1e-10, log=True) -> np.ndarray:
     """Метод последовательной релаксации (SOR)"""
     n = len(b)
     x = np.zeros(n, dtype=float) if x0 is None else np.array(x0, dtype=float)
@@ -11,10 +11,11 @@ def sor_method(A: np.ndarray, b: np.ndarray, omega=1.0, x0=None, tol=1e-10, log=
         k = 0
         print(f"Приближение k = {k}")
         print("-"*50)
-        print(x)
+        print(f"Вектор x: {x}")
+        print(f"Норма невязки: {check_residual(A, b, x)}")
         print("-"*50)
     
-    while check_residual(A, b, x) > tol:
+    while True:
         x_old = x.copy()
         
         for i in range(n):
@@ -24,17 +25,23 @@ def sor_method(A: np.ndarray, b: np.ndarray, omega=1.0, x0=None, tol=1e-10, log=
             
             x[i] = (1 - omega) * x_old[i] + (omega / A[i, i]) * (b[i] - sum_total)
         
+        r_norm = check_residual(A, b, x)
+        
         if log:
             k += 1
             print(f"Приближение k = {k}")
             print("-"*50)
-            print(x)
+            print(f"Вектор x: {x}")
+            print(f"Норма невязки: {r_norm:.6e}")
             print("-"*50)
+        
+        if r_norm < tol:
+            break
     
     return x
 
 
-def check_sor_convergence(A, omega=1.0):
+def check_sor_convergence(A: np.ndarray, omega=1.0) -> bool:
     """Проверяет сходимость метода SOR по критерию сходимости |λ(S)| < 1"""
 
     D = np.diag(np.diag(A))

@@ -37,10 +37,10 @@ def print_system(A, b):
     print(b)
 
 
-def execute_method(A, b, method):
+def execute_method(A, b, method, *args, **kwargs):
     A_copy = A.copy()
     b_copy = b.copy()
-    x = method(A_copy, b_copy)
+    x = method(A_copy, b_copy, *args, **kwargs)
     r = check_residual(A, b, x)
 
     print("\nРешение:")
