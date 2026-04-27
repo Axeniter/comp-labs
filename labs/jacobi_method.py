@@ -2,7 +2,7 @@ import numpy as np
 from utils import check_residual
 
 
-def jacobi_method(A: np.ndarray, b: np.ndarray, x0=None, tol=1e-10, log=True) -> np.ndarray:
+def jacobi_method(A: np.ndarray, b: np.ndarray, x0=None, tol=1e-10, max_iter=5000, log=True) -> np.ndarray:
     """Метод Якоби"""
     n = len(b)
     D = np.diag(A)
@@ -16,22 +16,20 @@ def jacobi_method(A: np.ndarray, b: np.ndarray, x0=None, tol=1e-10, log=True) ->
         x = np.copy(x0).astype(float)
 
     if log:
-            k = 0 
-            print(f"Приближение k = {k}")
+            print(f"Приближение k = {0}")
             print("-"*50)
             print(f"Вектор x: {x}")
             print(f"Норма невязки: {check_residual(A, b, x)}")
             print("-"*50)
 
 
-    while True:
+    for k in range(1, max_iter+1):
         x_new = D_inv * (b - A_LR @ x)
         x = x_new
 
         r_norm = check_residual(A, b, x)
 
         if log:
-            k += 1
             print(f"Приближение k = {k}")
             print("-"*50)
             print(f"Вектор x: {x}")

@@ -2,20 +2,19 @@ import numpy as np
 from utils import check_residual
 
 
-def sor_method(A: np.ndarray, b: np.ndarray, omega=1.0, x0=None, tol=1e-10, log=True) -> np.ndarray:
+def sor_method(A: np.ndarray, b: np.ndarray, omega=1.0, x0=None, tol=1e-10, max_iter=5000, log=True) -> np.ndarray:
     """Метод последовательной релаксации (SOR)"""
     n = len(b)
     x = np.zeros(n, dtype=float) if x0 is None else np.array(x0, dtype=float)
 
     if log:
-        k = 0
-        print(f"Приближение k = {k}")
+        print(f"Приближение k = {0}")
         print("-"*50)
         print(f"Вектор x: {x}")
         print(f"Норма невязки: {check_residual(A, b, x)}")
         print("-"*50)
     
-    while True:
+    for k in range(1, max_iter+1):
         x_old = x.copy()
         
         for i in range(n):
@@ -28,11 +27,10 @@ def sor_method(A: np.ndarray, b: np.ndarray, omega=1.0, x0=None, tol=1e-10, log=
         r_norm = check_residual(A, b, x)
         
         if log:
-            k += 1
             print(f"Приближение k = {k}")
             print("-"*50)
             print(f"Вектор x: {x}")
-            print(f"Норма невязки: {r_norm:.6e}")
+            print(f"Норма невязки: {r_norm}")
             print("-"*50)
         
         if r_norm < tol:

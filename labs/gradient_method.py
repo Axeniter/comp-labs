@@ -2,20 +2,19 @@ import numpy as np
 from utils import check_residual
 
 
-def gradient_descent(A: np.ndarray, b: np.ndarray, x0=None, tol=1e-10, log=True) -> np.ndarray:
+def gradient_descent(A: np.ndarray, b: np.ndarray, x0=None, tol=1e-10, max_iter=5000, log=True) -> np.ndarray:
     """Метод градиентного спуска"""
     n = len(b)
     x = np.zeros(n, dtype=float) if x0 is None else np.array(x0, dtype=float)
 
     if log:
-        k = 0
-        print(f"Приближение k = {k}")
+        print(f"Приближение k = {0}")
         print("-"*50)
         print(f"Вектор x: {x}")
         print(f"Норма невязки: {check_residual(A, b, x)}")
         print("-"*50)
     
-        while True:
+        for k in range(1, max_iter+1):
             r = A @ x - b
             Ar = A @ r
             alpha = np.dot(r, r) / np.dot(r, Ar)
@@ -25,7 +24,6 @@ def gradient_descent(A: np.ndarray, b: np.ndarray, x0=None, tol=1e-10, log=True)
             r_norm = check_residual(A, b, x)
             
             if log:
-                k += 1
                 print(f"Приближение k = {k}")
                 print("-"*50)
                 print(f"Вектор x: {x}")

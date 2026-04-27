@@ -1,7 +1,7 @@
 import numpy as np
     
 
-def inverse_iteration(A: np.ndarray, tol=1e-10, max_iter=1000, log=True):
+def inverse_iteration(A: np.ndarray, tol=1e-10, max_iter=5000, log=True):
     """Метод обратной итерации для нахождения наименьшего по модулю собственного значения матрицы"""
     n = A.shape[0]
     
