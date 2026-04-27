@@ -1,7 +1,7 @@
 import numpy as np
 
 
-def rotation_with_barriers(A, p=6):
+def rotation_with_barriers(A, p=6, log=True):
     """Метод вращений с преградами для нахождения собственных значений и собственных векторов симметричной матрицы"""
     n = A.shape[0]
     V = np.eye(n)
@@ -9,7 +9,7 @@ def rotation_with_barriers(A, p=6):
     
     for k in range(1, p + 1):
         sigma = compute_barrier(A, k)
-        
+
         while True:
             i, j = find_max_offdiag(A)
             max_val = A[i, j]
@@ -21,6 +21,14 @@ def rotation_with_barriers(A, p=6):
 
             apply_rotation(A, i, j, c, s)
             update_eigenvectors(V, i, j, c, s)
+
+        if log:
+            print(f"\nЭтап k = {k}")
+            print("-" * 50)
+            print(f"Преграда sigma_{k} = {sigma}")
+            print(f"Матрица A:\n{A}")
+            print(f"Векторы V:\n{V}")
+            print("-" * 50)
     
     eigenvalues = np.diag(A)
     

@@ -77,6 +77,21 @@ def execute_eigen_method(A, method, *args, **kwargs):
     input("\nПродолжить...")
 
 
+def execute_partial_eigen_method(A, method, *args, **kwargs):
+    A_copy = A.copy()
+    eigenvalue, eigenvector = method(A_copy, *args, **kwargs)
+    r = np.linalg.norm(A @ eigenvector - eigenvalue * eigenvector)
+    
+    print("\nСобственное значение:")
+    print(eigenvalue)
+    print("\nСобственный вектор:")
+    print(eigenvector)
+    print("\nНевязка:")
+    print(r)
+    
+    input("\nПродолжить...")
+
+
 def check_eigen_residual(A, eigenvalues, eigenvectors):
     n = len(eigenvalues)
     r = np.zeros(n)

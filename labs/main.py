@@ -11,7 +11,8 @@ from gradient_method import gradient_descent, check_gradient_descent_convergence
 from sor_method import sor_method, check_sor_convergence
 from rotation_with_barriers import rotation_with_barriers
 from richardson_method import richardson_method
-from utils import is_singular, print_system, execute_method, is_symmetrical, execute_eigen_method, is_spd
+from inverse_iteration import inverse_iteration
+from utils import is_singular, print_system, execute_method, is_symmetrical, execute_eigen_method, is_spd, execute_partial_eigen_method
 
 
 def main_menu():
@@ -140,7 +141,7 @@ def choose_method_menu(A, b):
         print("11. Метод Ричардсона")
         print("----- НАХОЖДЕНИЕ СОБСТВЕННЫХ ЗНАЧЕНИЙ -----")
         print("12. Метод вращения с преградами")
-        
+        print("13. Метод обратной итерации")
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
@@ -203,6 +204,11 @@ def choose_method_menu(A, b):
                 print("(!) Матрица несимметрична")
                 continue
             execute_eigen_method(A, rotation_with_barriers)
+        elif choice == "13":
+            if not is_spd(A):
+                print("(!) Матрица не является симметричной положительно определенной")
+                continue
+            execute_partial_eigen_method(A, inverse_iteration)
         else:
             print("\n(!) Некорректный ввод")
 

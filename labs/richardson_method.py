@@ -1,21 +1,38 @@
 import numpy as np
+from utils import check_residual
 
 
-def richardson_method(A, b, tau=None, tol=1e-10):
+def richardson_method(A, b, tau=None, tol=1e-10, log=True):
     """Метод Ричардсона"""
     n = len(b)
     x = np.zeros(n)
 
     tau = compute_optimal_tau(A) if tau is None else tau
     
-    while True:
-        r = A @ x - b
+    r = A @ x - b
+    r_norm = np.linalg.norm(r)
+    
+    if log:
+        k = 0 
+        print(f"Приближение k = {k}")
+        print("-"*50)
+        print(f"Вектор x: {x}")
+        print(f"Норма невязки: {r_norm}")
+        print("-"*50)
 
-        if np.linalg.norm(r) < tol:
-            break
+    while r_norm >= tol:
+        x = x - tau * r
         
-        x_new = x - tau * r
-        x = x_new
+        r = A @ x - b
+        r_norm = np.linalg.norm(r)
+        
+        if log:
+            k += 1
+            print(f"Приближение k = {k}")
+            print("-"*50)
+            print(f"Вектор x: {x}")
+            print(f"Норма невязки: {r_norm}")
+            print("-"*50)
     
     return x
 
