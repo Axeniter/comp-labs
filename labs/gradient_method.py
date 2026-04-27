@@ -16,11 +16,11 @@ def gradient_descent(A: np.ndarray, b: np.ndarray, x0=None, tol=1e-10, log=True)
         print("-"*50)
     
         while True:
-            r = b - A @ x
+            r = A @ x - b
             Ar = A @ r
             alpha = np.dot(r, r) / np.dot(r, Ar)
             
-            x = x + alpha * r
+            x = x - alpha * r
             
             r_norm = check_residual(A, b, x)
             

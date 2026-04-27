@@ -20,6 +20,16 @@ def is_symmetrical(A, tol=1e-10):
     return np.allclose(A, A.T, rtol=tol, atol=tol)
 
 
+def is_spd(A: np.ndarray):
+    """Проверка симметричности и положительной определённости матрицы"""
+    if not is_symmetrical(A):
+        return False
+    
+    eigenvalues = np.linalg.eigvalsh(A)
+    
+    return np.all(eigenvalues > 0)
+
+
 def is_positive_definite(A):
     return np.min(np.linalg.eigvalsh(A)) > 0
 

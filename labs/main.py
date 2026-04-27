@@ -10,7 +10,8 @@ from jacobi_method import jacobi_method, check_jacobi_convergence
 from gradient_method import gradient_descent, check_gradient_descent_convergence
 from sor_method import sor_method, check_sor_convergence
 from rotation_with_barriers import rotation_with_barriers
-from utils import is_singular, print_system, execute_method, is_symmetrical, execute_eigen_method
+from richardson_method import richardson_method
+from utils import is_singular, print_system, execute_method, is_symmetrical, execute_eigen_method, is_spd
 
 
 def main_menu():
@@ -136,8 +137,10 @@ def choose_method_menu(A, b):
         print("8. Метод Якоби")
         print("9. Метод последовательной релаксации")
         print("10. Метод наискорейшего градиентного спуска")
+        print("11. Метод Ричардсона")
         print("----- НАХОЖДЕНИЕ СОБСТВЕННЫХ ЗНАЧЕНИЙ -----")
-        print("11. Метод вращения с преградами")
+        print("12. Метод вращения с преградами")
+        
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
@@ -191,6 +194,11 @@ def choose_method_menu(A, b):
                 continue
             execute_method(A, b, gradient_descent)
         elif choice == "11":
+            if not is_spd(A):
+                print("(!) Метод Ричардсона не сходится т.к. матрица не является симметричной положительно определенной")
+                continue
+            execute_method(A, b, richardson_method)
+        elif choice == "12":
             if not is_symmetrical(A):
                 print("(!) Матрица несимметрична")
                 continue
