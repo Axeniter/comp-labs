@@ -20,6 +20,10 @@ def is_symmetrical(A, tol=1e-10):
     return np.allclose(A, A.T, rtol=tol, atol=tol)
 
 
+def is_positive_definite(A):
+    return np.min(np.linalg.eigvalsh(A)) > 0
+
+
 def check_residual(A, b, x):
     """Проверка невязки решения"""
     r = A @ x - b
