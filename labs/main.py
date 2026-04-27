@@ -9,7 +9,8 @@ from qr_decomposition import qr_decomposition
 from jacobi_method import jacobi_method, check_jacobi_convergence
 from gradient_method import gradient_descent, check_gradient_descent_convergence
 from sor_method import sor_method, check_sor_convergence
-from utils import is_singular, print_system, execute_method, is_symmetrical
+from rotation_with_barriers import rotation_with_barriers
+from utils import is_singular, print_system, execute_method, is_symmetrical, execute_eigen_method
 
 
 def main_menu():
@@ -125,6 +126,7 @@ def choose_method_menu(A, b):
         print("\nВЫБОР МЕТОДА")
         print("="*50)
         print("1. Назад")
+        print("----- РЕШЕНИЕ СИСТЕМЫ -----")
         print("2. Метод Гаусса с поиском максимального по матрице")
         print("3. Метод оптимального исключения")
         print("4. Метод квадратного корня (метод Холецкого)")
@@ -134,6 +136,8 @@ def choose_method_menu(A, b):
         print("8. Метод Якоби")
         print("9. Метод последовательной релаксации")
         print("10. Метод наискорейшего градиентного спуска")
+        print("----- НАХОЖДЕНИЕ СОБСТВЕННЫХ ЗНАЧЕНИЙ -----")
+        print("11. Метод вращения с преградами")
         print("="*50)
         
         choice = input("\nВыбор: ").strip()
@@ -186,6 +190,11 @@ def choose_method_menu(A, b):
                 print("(!) Метод градиентного спуска не сходится по критерию сходимости")
                 continue
             execute_method(A, b, gradient_descent)
+        elif choice == "11":
+            if not is_symmetrical(A):
+                print("(!) Матрица несимметрична")
+                continue
+            execute_eigen_method(A, rotation_with_barriers)
         else:
             print("\n(!) Некорректный ввод")
 

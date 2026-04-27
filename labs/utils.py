@@ -49,3 +49,32 @@ def execute_method(A, b, method, *args, **kwargs):
     print(r)
 
     input("\nПродолжить...")
+
+
+def execute_eigen_method(A, method, *args, **kwargs):
+    A_copy = A.copy()
+    eigenvalues, eigenvectors = method(A_copy, *args, **kwargs)
+    eigenvalues, eigenvectors = sort_eigenpairs(eigenvalues, eigenvectors)
+    r = check_eigen_residual(A, eigenvalues, eigenvectors)
+    
+    print("\nСобственные значения:")
+    print(eigenvalues)
+    print("\nСобственные векторы:")
+    print(eigenvectors)
+    print("\nНевязки:")
+    print(r)
+    
+    input("\nПродолжить...")
+
+
+def check_eigen_residual(A, eigenvalues, eigenvectors):
+    n = len(eigenvalues)
+    r = np.zeros(n)
+    for i in range(n):
+        r[i] = np.linalg.norm(A @ eigenvectors[:, i] - eigenvalues[i] * eigenvectors[:, i])
+    return r
+
+
+def sort_eigenpairs(eigenvalues, eigenvectors):
+    idx = np.argsort(eigenvalues)[::-1]
+    return eigenvalues[idx], eigenvectors[:, idx]
