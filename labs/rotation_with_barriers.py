@@ -12,8 +12,10 @@ def rotation_with_barriers(A, p=6, log=True):
 
         while True:
             i, j = find_max_offdiag(A)
+            if i == j:
+                break
+
             max_val = A[i, j]
-            
             if abs(max_val) <= sigma:
                 break
             
